@@ -34,6 +34,11 @@
     justify-content: space-evenly;
 
   }
+  hgroup {
+    display: grid;
+    place-items: center;
+    justify-content: center;
+  }
 </style>        
 
 

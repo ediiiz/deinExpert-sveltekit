@@ -1,16 +1,16 @@
-import type { Product } from '@prisma/client';
-import type { PriceHistory } from '@prisma/client';
-import type { Price } from '@prisma/client';
 import type { PageServerLoad } from './$types';
+import prisma from '$lib/prisma';
 
-export const load: PageServerLoad = async ({ fetch }) => {
-  const response = await fetch('/api/product');
+export const load: PageServerLoad = async () => {
+  const products = await prisma.product.findMany({
+    include: {
+      priceHistory: {
+        include: {
+          price: true,
+        },
+      },
+    },
+  });
 
-  return {
-    product: (await response.json()) as (Product & {
-      priceHistory: (PriceHistory & {
-        price: Price[];
-      })[];
-    })[],
-  };
+  return { products };
 };

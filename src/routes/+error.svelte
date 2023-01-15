@@ -27,10 +27,4 @@
 		place-content: center;
 		place-items: center;
 	}
-	img {
-		position: relative;
-		right: 20px;
-		width: 200px;
-		height: 100px;
-	}
 </style>
