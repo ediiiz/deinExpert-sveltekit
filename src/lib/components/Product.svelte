@@ -10,7 +10,7 @@
 
 <article>
   <header>
-    {products.product_name}
+    {products.productName}
   </header>
   <a href="/product/{products.webcode}" role="button">Ab {products.priceHistory[0].price[0].price}€</a>
   <footer>
