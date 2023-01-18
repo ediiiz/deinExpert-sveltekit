@@ -4,7 +4,7 @@ import prisma from '$lib/prisma';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ params: { webcode } }) => {
-  const post = await prisma.product.findUnique({
+  const product = await prisma.product.findUnique({
     where: { webcode: webcode },
     include: {
       priceHistory: {
@@ -15,5 +15,5 @@ export const GET: RequestHandler = async ({ params: { webcode } }) => {
     },
   });
 
-  return json(post);
+  return json(product);
 };
