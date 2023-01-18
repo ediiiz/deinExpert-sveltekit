@@ -5,6 +5,7 @@ export const load: PageServerLoad = async () => {
   const products = await prisma.product.findMany({
     include: {
       priceHistory: {
+        orderBy: { date: 'desc' },
         include: {
           price: true,
         },

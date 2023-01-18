@@ -7,6 +7,8 @@ const productData: Prisma.ProductCreateInput[] = [
     productName:
       'ASUS Vivobook 15 F515EA-EJ2150W slate grey, Intel i5-1135G7, 12GB, 512GB SSD Notebook',
     webcode: '17044211125',
+    image:
+      'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQvTiMEVFLxll9zgTId1oqfqxbHzYWoke4CWa4NvZDG8fgTtlvmjZ9MrjA',
     priceHistory: {
       create: [
         {
