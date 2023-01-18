@@ -11,9 +11,9 @@ datasource db {
 }
 
 model Product {
-  articleId    String         @id @unique
-  webcode      String         @unique
-  product_name String
+  webcode      String         @id @unique
+  productName  String
+  image        String?
   priceHistory PriceHistory[]
 }
 
@@ -21,7 +21,7 @@ model PriceHistory {
   priceHistoryId   String   @id @default(uuid())
   date             DateTime @default(now())
   productArticleId String?
-  product          Product? @relation(fields: [productArticleId], references: [articleId])
+  product          Product? @relation(fields: [productArticleId], references: [webcode])
   price            Price[]
 }
 
