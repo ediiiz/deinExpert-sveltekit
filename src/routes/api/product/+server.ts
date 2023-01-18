@@ -40,7 +40,8 @@ export const POST: RequestHandler = async ({ request }) => {
     const webcodeValidation = await validateWebcode(product.webcode);
     if (webcodeValidation === false) {
       throw error(500, {
-        message: 'Dieser Webcode ist leider nicht gültig.',
+        message:
+          'Webcode ungültig - versuchst du zu falsche Daten hochzuladen?😔',
       });
     }
     const productCreate = await prisma.product.create({
