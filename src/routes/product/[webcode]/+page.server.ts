@@ -7,6 +7,7 @@ export const load: PageServerLoad = async ({ params: { webcode } }) => {
     where: { webcode: webcode },
     include: {
       priceHistory: {
+        orderBy: { date: 'desc' },
         include: {
           price: true,
         },
