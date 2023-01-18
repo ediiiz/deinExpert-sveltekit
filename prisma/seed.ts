@@ -4,9 +4,9 @@ const prisma = new PrismaClient();
 
 const productData: Prisma.ProductCreateInput[] = [
   {
-    articleId: '1',
-    product_name: 'Product 1',
-    webcode: "100021",
+    productName:
+      'ASUS Vivobook 15 F515EA-EJ2150W slate grey, Intel i5-1135G7, 12GB, 512GB SSD Notebook',
+    webcode: '17044211125',
     priceHistory: {
       create: [
         {
@@ -59,46 +59,6 @@ const productData: Prisma.ProductCreateInput[] = [
               },
               {
                 price: 100,
-                branchId: 1,
-                branchName: 'Branch 1',
-              },
-            ],
-          },
-        },
-      ],
-    },
-  },
-  {
-    articleId: '2',
-    product_name: 'Product 2',
-    webcode: "100022",
-    priceHistory: {
-      create: [
-        {
-          price: {
-            create: [
-              {
-                price: 102,
-                branchId: 1,
-                branchName: 'Branch 1',
-              },
-            ],
-          },
-        },
-      ],
-    },
-  },
-  {
-    articleId: '3',
-    product_name: 'Product 3',
-    webcode: "100023",
-    priceHistory: {
-      create: [
-        {
-          price: {
-            create: [
-              {
-                price: 103,
                 branchId: 1,
                 branchName: 'Branch 1',
               },
@@ -116,7 +76,7 @@ async function main() {
     const product = await prisma.product.create({
       data: u,
     });
-    console.log(`Created user with id: ${product.product_name}`);
+    console.log(`Created user with id: ${product.productName}`);
   }
   console.log(`Seeding finished.`);
 }
