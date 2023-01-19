@@ -1,4 +1,4 @@
-import type { PageServerLoad } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 import prisma from '$lib/prisma';
 
 export const load: PageServerLoad = async () => {
@@ -11,7 +11,11 @@ export const load: PageServerLoad = async () => {
         },
       },
     },
+    take: 10,
+    orderBy: { views: 'desc' },
   });
 
   return { products };
 };
+
+const actions: Actions = {};

@@ -15,6 +15,15 @@ export const load: PageServerLoad = async ({ params: { webcode } }) => {
     },
   });
 
+  if (product) {
+    await prisma.product.update({
+      where: { webcode: webcode },
+      data: {
+        views: product.views + 1,
+      },
+    });
+  }
+
   if (!product) {
     throw error(404, {
       message:
