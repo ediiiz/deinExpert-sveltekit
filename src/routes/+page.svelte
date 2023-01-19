@@ -30,10 +30,4 @@
 </main>
 
 <style>
-  thead > tr > th {
-    text-align: justify;
-  }
-  tbody > tr > td {
-    text-align: justify;
-  }
 </style>

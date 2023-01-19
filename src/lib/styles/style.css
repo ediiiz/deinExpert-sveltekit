@@ -1,2 +1,5 @@
-
-
+::-webkit-scrollbar {
+  z-index: 99;
+  width: 0px;
+  background: white; /* make scrollbar transparent */
+}
