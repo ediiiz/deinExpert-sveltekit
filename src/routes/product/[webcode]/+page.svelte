@@ -30,7 +30,7 @@
     <div id="wrapper">
       <div id="pricePanel">
         <div id="price">
-          {#each data.product?.priceHistory[0].price as price}
+          {#each data.product?.priceHistory[0].price.sort((a, b) => a.price - b.price) as price}
             <article>
               <header>{price.branchName}</header>
               <a href={params.url} role="button"> {price.price}€</a>
@@ -53,6 +53,7 @@
     justify-content: center;
   }
   #imagePanel {
+    padding: 1rem 0;
     display: grid;
     place-items: center;
     justify-content: center;

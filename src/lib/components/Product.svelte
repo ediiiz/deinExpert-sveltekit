@@ -13,7 +13,8 @@
     {products.productName}
   </header>
   <a href="/product/{products.webcode}" role="button"
-    >Ab {products?.priceHistory[0]?.price[0]?.price || '...'}€</a
+    >Ab {products?.priceHistory[0]?.price.sort((a, b) => a.price - b.price)[0]
+      ?.price || '...'}€</a
   >
   <footer>
     Updated: <Time relative timestamp={products.priceHistory[0].date} />
