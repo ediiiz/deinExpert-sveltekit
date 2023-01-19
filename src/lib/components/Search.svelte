@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import 'iconify-icon';
   let searchTerm = '';
   const handleSearch = () => {
     goto(`/search?p=${searchTerm}`);
@@ -15,7 +16,7 @@
       name="search"
       placeholder="Suche..."
     />
-    <label for="search">🔎︎</label>
+    <label for="search"><iconify-icon icon="ph:magnifying-glass" /></label>
   </div>
 </form>
 
@@ -30,7 +31,7 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    bottom: 5px;
+    bottom: 7px;
     right: 30px;
   }
 </style>
