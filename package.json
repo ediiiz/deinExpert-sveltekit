@@ -33,6 +33,7 @@
   "dependencies": {
     "@picocss/pico": "^1.5.6",
     "@prisma/client": "^4.2.1",
+    "@types/chart.js": "^2.9.37",
     "chart.js": "^4.2.0",
     "iconify-icon": "^1.0.2",
     "svelte-chartjs": "^3.1.2",
