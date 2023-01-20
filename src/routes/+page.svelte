@@ -12,6 +12,12 @@
   out:fly={{ x: -100, duration: 250 }}
 >
   <div>
+    <hgroup>
+      <h1>Top 10</h1>
+      <h2>Die beliebtesten Produkte</h2>
+    </hgroup>
+  </div>
+  <div>
     {#each data.products as products}
       <Product {products} />
     {/each}
@@ -30,4 +36,9 @@
 </main>
 
 <style>
+  hgroup {
+    display: grid;
+    place-items: center;
+    justify-content: center;
+  }
 </style>

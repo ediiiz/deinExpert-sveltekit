@@ -1,28 +1,41 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-  import MediaQuery from 'svelte-media-queries'
+  import { page } from '$app/stores';
+  import MediaQuery from 'svelte-media-queries';
 </script>
-
 
 <main>
   <nav class="container-fluid">
     <ul>
-      <li><strong><a href="/" class="contrast">Preis-Detektiv</a></strong></li>
+      <li>
+        <strong id="brand"
+          ><a href="/" class="contrast">Preis-Detektiv</a></strong
+        >
+      </li>
     </ul>
     <ul>
-      <li><a href="/help" role="button">FAQ</a></li>
+      <li><a href="/help" role="button" id="faq">FAQ</a></li>
     </ul>
-  </nav>  
+  </nav>
 </main>
-
 
 <style>
   ul > li > a {
     font-size: medium;
     color: var(--contrast);
   }
+  #brand {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    font-size: xx-large;
+  }
+  #faq {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    font-size: large;
+  }
   nav {
-    border-bottom: 1px solid var(--contrast);	
   }
   main {
     margin-bottom: 15px;

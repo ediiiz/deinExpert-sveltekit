@@ -7,14 +7,26 @@
 </script>
 
 <div class="layout">
-  <Header />
-  <Search />
+  <div class="Header">
+    <Header />
+  </div>
+  <div class="Search">
+    <Search />
+  </div>
   <slot />
-  <Footer />
+  <div class="Footer">
+    <Footer />
+  </div>
 </div>
 
 <style>
-  .layout {
+  .Header {
+    padding: 0 0rem;
+  }
+  .Search {
+    padding: 0 1rem;
+  }
+  .Footer {
     padding: 0 1rem;
   }
 </style>
