@@ -2,12 +2,13 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Product {
@@ -24,6 +25,8 @@ model PriceHistory {
   productArticleId String?
   product          Product? @relation(fields: [productArticleId], references: [webcode])
   price            Price[]
+
+  @@index([productArticleId])
 }
 
 model Price {
@@ -33,4 +36,6 @@ model Price {
   branchId       Int
   priceHistory   PriceHistory @relation(fields: [priceHistoryId], references: [priceHistoryId])
   priceHistoryId String
+
+  @@index([priceHistoryId])
 }
