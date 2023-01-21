@@ -124,7 +124,15 @@
     >
       <canvas id="myChart" />
     </div>
-    <div id="wrapper">
+    <div
+      id="wrapper"
+      in:fly={{
+        y: 100,
+        duration: 1000,
+        delay: 500,
+        easing: backOut,
+      }}
+    >
       <div id="pricePanel">
         <div id="price">
           {#each data.product?.priceHistory[0].price.sort((a, b) => a.price - b.price) as price, i}
