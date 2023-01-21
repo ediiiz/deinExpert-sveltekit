@@ -38,7 +38,7 @@ export const POST: RequestHandler = async ({ request }) => {
       message: 'Ungültige Daten - versuchst du zu falsche Daten hochzuladen?😔',
     });
   }
-  
+
   const findUnique = await prisma.product.findUnique({
     where: { webcode: product.webcode },
   });
