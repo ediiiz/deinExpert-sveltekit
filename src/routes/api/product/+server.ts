@@ -3,6 +3,18 @@ import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import type { product } from '$lib/types/types';
 import validateWebcode from '$lib/validateWebcode';
+import { z } from 'zod';
+
+const productSchema = z.object({
+  webcode: z.string(),
+  price: z.array(
+    z.object({
+      price: z.number(),
+      branchName: z.string(),
+      branchId: z.number(),
+    })
+  ),
+});
 
 export async function GET() {
   const products = await prisma.product.findMany({
@@ -19,6 +31,14 @@ export async function GET() {
 
 export const POST: RequestHandler = async ({ request }) => {
   const product = (await request.json()) as product;
+  const productValidation = productSchema.safeParse(product);
+
+  if (!productValidation.success) {
+    throw error(500, {
+      message: 'Ungültige Daten - versuchst du zu falsche Daten hochzuladen?😔',
+    });
+  }
+  
   const findUnique = await prisma.product.findUnique({
     where: { webcode: product.webcode },
   });
