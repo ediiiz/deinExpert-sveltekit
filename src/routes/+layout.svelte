@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { fly } from 'svelte/transition';
   import Header from '$lib/components/Header.svelte';
   import Search from '$lib/components/Search.svelte';
   import '@picocss/pico';
@@ -13,7 +14,9 @@
   <div class="Search">
     <Search />
   </div>
-  <slot />
+  <div class="slot">
+    <slot />
+  </div>
   <div class="Footer">
     <Footer />
   </div>
@@ -28,5 +31,8 @@
   }
   .Footer {
     padding: 0 1rem;
+  }
+  .slot {
+    padding: 0 0.5rem;
   }
 </style>

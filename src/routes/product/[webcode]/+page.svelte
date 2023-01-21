@@ -1,13 +1,34 @@
 <script lang="ts">
-  import { fly } from 'svelte/transition';
+  import { fade, fly } from 'svelte/transition';
+  import { backOut } from 'svelte/easing';
   import type { PageData } from './$types';
   import Time from 'svelte-time';
-  import { Chart } from 'chart.js/auto';
+  //import { Chart } from 'chart.js/auto';
+  import {
+    Chart,
+    LineController,
+    LineElement,
+    PointElement,
+    CategoryScale,
+    LinearScale,
+    Filler,
+    Tooltip,
+  } from 'chart.js';
   import { onMount } from 'svelte';
   export let data: PageData;
   export let params = {
     url: 'https://www.expert.de',
   };
+
+  Chart.register(
+    LineController,
+    PointElement,
+    CategoryScale,
+    LinearScale,
+    LineElement,
+    Filler,
+    Tooltip
+  );
 
   const labelsDate = data.product.priceHistory.map((item) => {
     let date = new Date(item.date);
@@ -63,7 +84,14 @@
   out:fly={{ x: -100, duration: 250 }}
 >
   <div id="body" class="container-fluid">
-    <div id="infoPanel">
+    <div
+      id="infoPanel"
+      in:fade={{
+        duration: 1000,
+        delay: 300,
+        easing: backOut,
+      }}
+    >
       <hgroup>
         <h1>{data.product?.productName}</h1>
         <h2>
@@ -74,17 +102,39 @@
         </h2>
       </hgroup>
     </div>
-    <div id="imagePanel">
+    <div
+      id="imagePanel"
+      in:fly={{
+        y: 100,
+        duration: 1000,
+        delay: 500,
+        easing: backOut,
+      }}
+    >
       <img src={data.product?.image} alt={data.product?.productName} />
     </div>
-    <div id="chartPanel">
+    <div
+      id="chartPanel"
+      in:fly={{
+        y: 100,
+        duration: 1000,
+        delay: 500,
+        easing: backOut,
+      }}
+    >
       <canvas id="myChart" />
     </div>
     <div id="wrapper">
       <div id="pricePanel">
         <div id="price">
-          {#each data.product?.priceHistory[0].price.sort((a, b) => a.price - b.price) as price}
-            <article>
+          {#each data.product?.priceHistory[0].price.sort((a, b) => a.price - b.price) as price, i}
+            <article
+              in:fly={{
+                y: 100,
+                delay: 300 * i,
+                easing: backOut,
+              }}
+            >
               <header>{price.branchName}</header>
               <a href={params.url} role="button"> {price.price}€</a>
             </article>

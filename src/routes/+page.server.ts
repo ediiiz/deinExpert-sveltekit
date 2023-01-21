@@ -9,6 +9,7 @@ export const load: PageServerLoad = async () => {
         include: {
           price: true,
         },
+        take: 1,
       },
     },
     take: 10,

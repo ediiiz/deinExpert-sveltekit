@@ -30,6 +30,7 @@
     font-size: xx-large;
   }
   #faq {
+    padding: 1rem 1rem;
     display: flex;
     justify-content: center;
     align-items: baseline;

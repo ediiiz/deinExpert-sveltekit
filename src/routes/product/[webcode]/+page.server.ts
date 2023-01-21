@@ -11,6 +11,7 @@ export const load: PageServerLoad = async ({ params: { webcode } }) => {
         include: {
           price: true,
         },
+        take: 5,
       },
     },
   });
