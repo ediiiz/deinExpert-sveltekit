@@ -11,6 +11,8 @@
     PointElement,
     CategoryScale,
     LinearScale,
+    Filler,
+    Tooltip,
   } from 'chart.js';
   import { onMount } from 'svelte';
   export let data: PageData;
@@ -23,7 +25,9 @@
     PointElement,
     CategoryScale,
     LinearScale,
-    LineElement
+    LineElement,
+    Filler,
+    Tooltip
   );
 
   const labelsDate = data.product.priceHistory.map((item) => {
