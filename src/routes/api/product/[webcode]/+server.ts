@@ -11,6 +11,7 @@ export const GET: RequestHandler = async ({ params: { webcode } }) => {
         include: {
           price: true,
         },
+        take: 1,
       },
     },
   });
