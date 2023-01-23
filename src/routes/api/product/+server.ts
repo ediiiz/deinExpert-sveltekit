@@ -4,6 +4,7 @@ import type { RequestHandler } from './$types';
 import type { product } from '$lib/types/types';
 import validateWebcode from '$lib/validateWebcode';
 import { z } from 'zod';
+import validateRecaptcha from '$lib/validateRecaptcha';
 
 const productSchema = z.object({
   webcode: z.string(),
@@ -14,6 +15,7 @@ const productSchema = z.object({
       branchId: z.number(),
     })
   ),
+  verify: z.string(),
 });
 
 export async function GET() {
@@ -31,11 +33,19 @@ export async function GET() {
 
 export const POST: RequestHandler = async ({ request }) => {
   const product = (await request.json()) as product;
-  const productValidation = productSchema.safeParse(product);
 
+  const productValidation = productSchema.safeParse(product);
   if (!productValidation.success) {
     throw error(500, {
       message: 'Ungültige Daten - versuchst du zu falsche Daten hochzuladen?😔',
+    });
+  }
+
+  const recaptchaValidation = await validateRecaptcha(product.verify);
+  if (!recaptchaValidation.success) {
+    throw error(500, {
+      message:
+        'Recaptcha ungültig - versuchst du zu falsche Daten hochzuladen?😔',
     });
   }
 
