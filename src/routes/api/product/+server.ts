@@ -18,19 +18,6 @@ const productSchema = z.object({
   verify: z.string(),
 });
 
-export async function GET() {
-  const products = await prisma.product.findMany({
-    include: {
-      priceHistory: {
-        include: {
-          price: true,
-        },
-      },
-    },
-  });
-  return json(products);
-}
-
 export const POST: RequestHandler = async ({ request }) => {
   const product = (await request.json()) as product;
 
