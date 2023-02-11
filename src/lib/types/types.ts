@@ -1,5 +1,6 @@
 type product = {
   webcode: string;
+  url: string;
   price: [
     {
       price: number;
@@ -7,6 +8,15 @@ type product = {
       branchId: number;
     }
   ];
+  verify: string;
+};
+
+type googleSiteVerifyResponse = {
+  success: boolean;
+  challenge_ts: string;
+  hostname: string;
+  score: number;
+  action: string;
 };
 
 type googleSearchApiResponse = {
@@ -101,4 +111,4 @@ type googleSearchApiResponse = {
   ];
 };
 
-export type { product, googleSearchApiResponse };
+export type { product, googleSearchApiResponse, googleSiteVerifyResponse };

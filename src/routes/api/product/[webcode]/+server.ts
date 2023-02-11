@@ -11,9 +11,17 @@ export const GET: RequestHandler = async ({ params: { webcode } }) => {
         include: {
           price: true,
         },
+        take: 1,
       },
     },
   });
 
-  return json(product);
+  if (!product) {
+    return json({
+      success: false,
+      error: 'Product not found',
+    });
+  }
+
+  return json({ success: true, product });
 };
