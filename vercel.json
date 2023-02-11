@@ -6,7 +6,7 @@
         { "key": "Access-Control-Allow-Credentials", "value": "true" },
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://www.expert.de/*"
+          "value": "https://www.expert.de"
         },
         {
           "key": "Access-Control-Allow-Methods",
