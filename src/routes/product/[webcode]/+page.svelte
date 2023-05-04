@@ -16,9 +16,6 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   export let data: PageData;
-  export let params = {
-    url: 'https://www.expert.de',
-  };
 
   Chart.register(
     LineController,
@@ -144,7 +141,12 @@
               }}
             >
               <header>{price.branchName}</header>
-              <a href={params.url} role="button"> {price.price}€</a>
+              <a
+                href={`${data.product?.productUrl}?branch_id=${price.branchId}`}
+                role="button"
+              >
+                {price.price}€</a
+              >
             </article>
           {/each}
         </div>

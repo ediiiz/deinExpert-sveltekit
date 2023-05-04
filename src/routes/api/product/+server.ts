@@ -66,6 +66,7 @@ export const POST: RequestHandler = async ({ request }) => {
         webcode: product.webcode,
         productName: webcodeValidation.items[0].pagemap.listitem[4].name,
         image: webcodeValidation.items[0].pagemap.cse_thumbnail[0].src,
+        productUrl: webcodeValidation.items[0].link,
         priceHistory: {
           create: {
             price: {
