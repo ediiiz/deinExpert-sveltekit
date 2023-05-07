@@ -2,8 +2,6 @@
   import { fly } from 'svelte/transition';
   import type { PageData } from './$types';
   import Product from '$lib/components/Product.svelte';
-
-  // data returned from +page.server.js
   export let data: PageData;
 </script>
 
