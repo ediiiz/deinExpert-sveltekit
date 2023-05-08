@@ -74,6 +74,25 @@
       },
     });
   });
+
+  const sortedPrice = data.product.priceHistory[0].price.sort(
+    (a, b) => a.price - b.price
+  );
+
+  const lowestPrice = {
+    price: sortedPrice[0].price,
+    branchName: sortedPrice[0].branchName,
+    branchId: sortedPrice[0].branchId,
+  };
+  const highestPrice = {
+    price: sortedPrice[sortedPrice.length - 1].price,
+    branchName: sortedPrice[sortedPrice.length - 1].branchName,
+    branchId: sortedPrice[sortedPrice.length - 1].branchId,
+  };
+
+  const savingsInPercent = Math.round(
+    ((highestPrice.price - lowestPrice.price) / highestPrice.price) * 100
+  );
 </script>
 
 <main
@@ -131,24 +150,16 @@
       }}
     >
       <div id="pricePanel">
-        <div id="price">
-          {#each data.product?.priceHistory[0].price.sort((a, b) => a.price - b.price) as price, i}
-            <article
-              in:fly={{
-                y: 100,
-                delay: 300 * i,
-                easing: backOut,
-              }}
+        <div>
+          <article>
+            <header>Günstiger Preis</header>
+            <a
+              href={`${data.product?.productUrl}?branch_id=${lowestPrice.branchId}`}
+              role="button"
             >
-              <header>{price.branchName}</header>
-              <a
-                href={`${data.product?.productUrl}?branch_id=${price.branchId}`}
-                role="button"
-              >
-                {price.price}€</a
-              >
-            </article>
-          {/each}
+              Spare bis zu {savingsInPercent}%</a
+            >
+          </article>
         </div>
       </div>
     </div>
