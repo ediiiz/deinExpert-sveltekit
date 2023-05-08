@@ -1,15 +1,8 @@
-<script lang="ts">
-  import { page } from '$app/stores';
-  import MediaQuery from 'svelte-media-queries';
-</script>
-
 <main>
   <nav class="container-fluid">
     <ul>
       <li>
-        <strong id="brand"
-          ><a href="/" class="contrast">Preis-Detektiv</a></strong
-        >
+        <strong id="brand"><a href="/" class="contrast">deinExpert</a></strong>
       </li>
     </ul>
     <ul>
