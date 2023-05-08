@@ -27,7 +27,7 @@
     Tooltip
   );
 
-  const labelsDate = data.product.priceHistory.map((item) => {
+  const labelsDate = data.product?.priceHistory.map((item) => {
     let date = new Date(item.date);
     let day = date.getDate().toString().padStart(2, '0');
     let month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -35,12 +35,12 @@
     return formattedDate;
   });
 
-  const labelsPrice = data.product.priceHistory.map((item) => {
+  const labelsPrice = data.product?.priceHistory.map((item) => {
     return item.price.sort((a, b) => a.price - b.price)[0].price;
   });
 
   let lineData = {
-    labels: labelsDate.reverse(),
+    labels: labelsDate?.reverse(),
     datasets: [
       {
         label: 'Preisverlauf',
@@ -49,7 +49,7 @@
         borderWidth: 4,
         hoverBackgroundColor: 'rgba(255,99,132,0.4)',
         hoverBorderColor: 'rgba(255,99,132,1)',
-        data: labelsPrice.reverse(),
+        data: labelsPrice?.reverse(),
         fill: true,
         tension: 0.4,
       },
@@ -75,24 +75,35 @@
     });
   });
 
-  const sortedPrice = data.product.priceHistory[0].price.sort(
+  const sortedPrices = data.product.priceHistory[0].price.sort(
     (a, b) => a.price - b.price
   );
+  const [lowestPrice, highestPrice] = [
+    sortedPrices[0],
+    sortedPrices[sortedPrices.length - 1],
+  ];
 
-  const lowestPrice = {
-    price: sortedPrice[0].price,
-    branchName: sortedPrice[0].branchName,
-    branchId: sortedPrice[0].branchId,
-  };
-  const highestPrice = {
-    price: sortedPrice[sortedPrice.length - 1].price,
-    branchName: sortedPrice[sortedPrice.length - 1].branchName,
-    branchId: sortedPrice[sortedPrice.length - 1].branchId,
-  };
+  const calculateSavings = (highest: number, lowest: number) =>
+    Math.round(((highest - lowest) / highest) * 100);
 
-  const savingsInPercent = Math.round(
-    ((highestPrice.price - lowestPrice.price) / highestPrice.price) * 100
+  const savingsInPercent = calculateSavings(
+    highestPrice.price,
+    lowestPrice.price
   );
+
+  const priceDetails = {
+    lowestPrice: {
+      price: lowestPrice.price,
+      branchName: lowestPrice.branchName,
+      branchId: lowestPrice.branchId,
+    },
+    highestPrice: {
+      price: highestPrice.price,
+      branchName: highestPrice.branchName,
+      branchId: highestPrice.branchId,
+    },
+    savingsInPercent,
+  };
 </script>
 
 <main
@@ -118,27 +129,29 @@
         </h2>
       </hgroup>
     </div>
-    <div
-      id="imagePanel"
-      in:fly={{
-        y: 100,
-        duration: 1000,
-        delay: 500,
-        easing: backOut,
-      }}
-    >
-      <img src={data.product?.image} alt={data.product?.productName} />
-    </div>
-    <div
-      id="chartPanel"
-      in:fly={{
-        y: 100,
-        duration: 1000,
-        delay: 500,
-        easing: backOut,
-      }}
-    >
-      <canvas id="myChart" />
+    <div id="detailPanel">
+      <div
+        id="imagePanel"
+        in:fly={{
+          y: 100,
+          duration: 1000,
+          delay: 500,
+          easing: backOut,
+        }}
+      >
+        <img src={data.product?.image} alt={data.product?.productName} />
+      </div>
+      <div
+        id="chartPanel"
+        in:fly={{
+          y: 100,
+          duration: 1000,
+          delay: 500,
+          easing: backOut,
+        }}
+      >
+        <canvas id="myChart" />
+      </div>
     </div>
     <div
       id="wrapper"
@@ -152,12 +165,11 @@
       <div id="pricePanel">
         <div>
           <article>
-            <header>Günstiger Preis</header>
             <a
-              href={`${data.product?.productUrl}?branch_id=${lowestPrice.branchId}`}
+              href={`?branch=${priceDetails.lowestPrice.branchId}`}
               role="button"
             >
-              Spare bis zu {savingsInPercent}%</a
+              Ab {priceDetails.lowestPrice.price}€</a
             >
           </article>
         </div>
@@ -167,6 +179,12 @@
 </main>
 
 <style>
+  #detailPanel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 2rem;
+  }
+
   #chartPanel > * {
     padding-top: 30px;
     height: 15rem;
