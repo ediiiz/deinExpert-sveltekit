@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ params: { webcode }, url }) => {
       select: { productUrl: true },
     });
     if (product?.productUrl) {
-      throw redirect(302, `${product.productUrl}?branchid=${branch}`);
+      throw redirect(302, `${product.productUrl}?branch_id=${branch}&gclid=0`);
     }
   }
 
