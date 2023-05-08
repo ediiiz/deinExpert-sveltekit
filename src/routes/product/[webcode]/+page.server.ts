@@ -1,8 +1,19 @@
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import prisma from '$lib/prisma';
 
-export const load: PageServerLoad = async ({ params: { webcode } }) => {
+export const load: PageServerLoad = async ({ params: { webcode }, url }) => {
+  const branch = url.searchParams.get('branch');
+  if (branch) {
+    const product = await prisma.product.findUnique({
+      where: { webcode: webcode },
+      select: { productUrl: true },
+    });
+    if (product?.productUrl) {
+      throw redirect(302, `${product.productUrl}?branchid=${branch}`);
+    }
+  }
+
   const product = await prisma.product.findUnique({
     where: { webcode: webcode },
     include: {
