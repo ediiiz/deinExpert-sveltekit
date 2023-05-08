@@ -2,8 +2,8 @@ import prisma from '$lib/prisma';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import type { product } from '$lib/types/types';
-import validateWebcode from '$lib/validateWebcode';
 import { z } from 'zod';
+import validateWebcode from '$lib/validateWebcode';
 import validateRecaptcha from '$lib/validateRecaptcha';
 
 const productSchema = z.object({
