@@ -177,7 +177,7 @@
       <div id="pricePanel">
         <div>
           <article>
-            <a href={`?data=${affiliate}`} role="button">
+            <a href={`?data=${affiliate}`} target="_blank" role="button">
               Ab {priceDetails.lowestPrice.price}€</a
             >
           </article>
