@@ -2,15 +2,24 @@ import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import prisma from '$lib/prisma';
 
+type BranchAffiliate = {
+  branchId: number;
+  affiliate: string;
+};
+
 export const load: PageServerLoad = async ({ params: { webcode }, url }) => {
-  const branch = url.searchParams.get('branch');
-  if (branch) {
+  const data = url.searchParams.get('data');
+  if (data) {
+    const branchAffiliate = JSON.parse(atob(data)) as BranchAffiliate;
     const product = await prisma.product.findUnique({
       where: { webcode: webcode },
       select: { productUrl: true },
     });
     if (product?.productUrl) {
-      throw redirect(302, `${product.productUrl}?branch_id=${branch}&gclid=0`);
+      throw redirect(
+        302,
+        `${branchAffiliate.affiliate}&p=${product.productUrl}?branch_id=${branchAffiliate.branchId}&gclid=0`
+      );
     }
   }
 

@@ -3,6 +3,7 @@
   import { backOut } from 'svelte/easing';
   import type { PageData } from './$types';
   import Time from 'svelte-time';
+  import { fetchCashback } from './affiliate';
   //import { Chart } from 'chart.js/auto';
   import {
     Chart,
@@ -26,6 +27,16 @@
     Filler,
     Tooltip
   );
+
+  let affiliate: string;
+  function createAffiliate64(affiliate: string): string {
+    const affiliate64 = {
+      branchId: priceDetails.lowestPrice.branchId,
+      affiliate,
+    };
+    const affiliate64String = btoa(JSON.stringify(affiliate64));
+    return affiliate64String;
+  }
 
   const labelsDate = data.product?.priceHistory.map((item) => {
     let date = new Date(item.date);
@@ -73,6 +84,7 @@
         },
       },
     });
+    affiliate = createAffiliate64(await fetchCashback());
   });
 
   const sortedPrices = data.product.priceHistory[0].price.sort(
@@ -165,10 +177,7 @@
       <div id="pricePanel">
         <div>
           <article>
-            <a
-              href={`?branch=${priceDetails.lowestPrice.branchId}`}
-              role="button"
-            >
+            <a href={`?data=${affiliate}`} role="button">
               Ab {priceDetails.lowestPrice.price}€</a
             >
           </article>
