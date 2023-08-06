@@ -30,8 +30,7 @@ export const load: PageServerLoad = async ({ url }) => {
 
   if (products.length === 0) {
     throw error(404, {
-      message:
-        'Kein Produkt gefunden, versuch es mit einem anderen Suchbegriff!',
+      message: 'Kein Produkt gefunden, versuch es mit dem Webcode oder der Modellnummer!',
     });
   }
 
