@@ -4,6 +4,7 @@
   import type { PageData } from './$types';
   import Time from 'svelte-time';
   import { fetchCashback } from './affiliate';
+  import { getLinkomatAwin } from './linkomat';
   import Modal from '$lib/components/Modal.svelte';
   //import { Chart } from 'chart.js/auto';
   import {
@@ -26,6 +27,7 @@
   Chart.register(LineController, PointElement, CategoryScale, LinearScale, LineElement, Filler, Tooltip);
 
   let affiliate: string;
+
   function createAffiliate64(affiliate: string | void): string {
     if (!affiliate) {
       throw new Error('Affiliate is void');
@@ -36,6 +38,16 @@
     };
     const affiliate64String = btoa(JSON.stringify(affiliate64));
     return affiliate64String;
+  }
+
+  function createAffiliate(awinlink: string | void): void {
+    if (!awinlink) {
+      throw new Error('Awinlink is void');
+    } else {
+      affiliate =
+        `${awinlink}&p=` +
+        encodeURIComponent(`${data.product.productUrl}?branch_id=${priceDetails.lowestPrice.branchId}`);
+    }
   }
 
   onMount(async () => {
@@ -169,11 +181,18 @@
   </div>
   <Modal bind:showModal>
     <h2 slot="header">Noch eine Sache...</h2>
-    <p>Beachte dass du durch das klicken des links auf einen Affiliate link weitergeleitet wirst.</p>
-    <p>Wir erhalten dadurch eine kleine Provision, dies hat keinen Einfluss auf deinen Preis!</p>
+    <div>Beachte dass du durch das Klicken auf einen Affiliate link weitergeleitet wirst.</div>
+    <div>Wir erhalten dadurch eine kleine Provision, dies hat keinen Einfluss auf deinen Preis!</div>
     <p>Danke dass du uns unterstuetzt!❤️</p>
 
-    <a href={`?data=${affiliate}`} target="_blank" role="button">Weiter zu deinem Deal!</a>
+    {#if !affiliate}
+      <button style="display:none;" on:click={async () => createAffiliate(await fetchCashback())}
+        >Link generieren</button
+      >
+      <button on:click={async () => createAffiliate(await getLinkomatAwin())}>Link generieren</button>
+    {:else}
+      <a href={affiliate} target="_blank" role="button">Weiter zum Deal</a>
+    {/if}
   </Modal>
 </main>
 
