@@ -3,7 +3,7 @@
   import { fly } from 'svelte/transition';
 </script>
 
-<main in:fly={{ x: -100, duration: 250, delay: 300 }} out:fly={{ x: -100, duration: 250 }}>
+<main in:fly|global={{ x: -100, duration: 250, delay: 300 }} out:fly|global={{ x: -100, duration: 250 }}>
   <div class="container-fluid error">
     <hgroup>
       <h1>{@html $page.error?.message}</h1>
@@ -14,18 +14,3 @@
   </div>
 </main>
 
-<style>
-  .error {
-    height: 80vh;
-    display: grid;
-    gap: var(--spacing-32);
-    place-content: center;
-    place-items: center;
-  }
-
-  .error > div {
-    display: flex;
-    place-content: center;
-    place-items: center;
-  }
-</style>

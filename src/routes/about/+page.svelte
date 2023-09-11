@@ -3,8 +3,8 @@
 </script>
 
 <div
-  in:fly={{ x: -100, duration: 250, delay: 300 }}
-  out:fly={{ x: -100, duration: 250 }}
+  in:fly|global={{ x: -100, duration: 250, delay: 300 }}
+  out:fly|global={{ x: -100, duration: 250 }}
 >
   <div id="title">
     <h1>About</h1>
@@ -24,19 +24,3 @@
     </p>
   </div>
 </div>
-
-<style>
-  #title {
-    display: flex;
-    grid-template-columns: 1fr;
-    align-items: center;
-    justify-content: center;
-  }
-  #content {
-    margin: 0 15px 0 15px;
-    display: grid;
-    grid-template-columns: 90%;
-    align-items: center;
-    justify-content: center;
-  }
-</style>

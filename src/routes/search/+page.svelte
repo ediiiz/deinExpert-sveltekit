@@ -7,10 +7,10 @@
 </script>
 
 <main
-  in:fly={{ x: -100, duration: 250, delay: 300 }}
-  out:fly={{ x: -100, duration: 250 }}
+  in:fly|global={{ x: -100, duration: 250, delay: 300 }}
+  out:fly|global={{ x: -100, duration: 250 }}
 >
-  <div in:fly={{ x: -100, duration: 250, delay: 300 }}>
+  <div in:fly|global={{ x: -100, duration: 250, delay: 300 }}>
     {#each data.products as products}
       <Product {products} />
     {/each}

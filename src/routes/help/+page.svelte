@@ -4,8 +4,8 @@
 
 <main
   class="container-fluid"
-  in:fly={{ x: -100, duration: 250, delay: 300 }}
-  out:fly={{ x: -100, duration: 250 }}
+  in:fly|global={{ x: -100, duration: 250, delay: 300 }}
+  out:fly|global={{ x: -100, duration: 250 }}
 >
   <details>
     <summary>Wieso sind die Daten nicht aktuell?</summary>
@@ -38,12 +38,3 @@
   </details>
 </main>
 
-<style>
-  main {
-    padding-top: 15px;
-  }
-  details > article {
-    display: flex;
-    justify-content: space-evenly;
-  }
-</style>

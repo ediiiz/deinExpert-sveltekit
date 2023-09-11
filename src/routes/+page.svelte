@@ -5,17 +5,15 @@
   export let data: PageData;
 </script>
 
-<main
-  in:fly={{ x: -100, duration: 250, delay: 300 }}
-  out:fly={{ x: -100, duration: 250 }}
+<main class="grid grid-rows-1"
+  in:fly|global={{ x: -100, duration: 250, delay: 300 }}
+  out:fly|global={{ x: -100, duration: 250 }}
 >
-  <div>
-    <hgroup>
-      <h1>Top 10</h1>
-      <h2>Die beliebtesten Produkte</h2>
-    </hgroup>
+  <div class="grid grid-rows-2 justify-center justify-items-center">
+      <h1 class="text-2xl">Top 10</h1>
+      <h2 class="text-xl">Die beliebtesten Produkte</h2>
   </div>
-  <div>
+  <div class="">
     {#each data.products as products}
       <Product {products} />
     {/each}
@@ -32,11 +30,3 @@
     </article>
   </div>
 </main>
-
-<style>
-  hgroup {
-    display: grid;
-    place-items: center;
-    justify-content: center;
-  }
-</style>

@@ -3,7 +3,3 @@
   width: 0px;
   background: white; /* make scrollbar transparent */
 }
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;

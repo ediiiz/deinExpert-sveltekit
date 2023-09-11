@@ -6,6 +6,7 @@
   import { fetchCashback } from './affiliate';
   import { getLinkomatAwin } from './linkomat';
   import Modal from '$lib/components/Modal.svelte';
+  import { Button } from "$lib/components/ui/button";
   //import { Chart } from 'chart.js/auto';
   import {
     Chart,
@@ -27,18 +28,6 @@
   Chart.register(LineController, PointElement, CategoryScale, LinearScale, LineElement, Filler, Tooltip);
 
   let affiliate: string;
-
-  function createAffiliate64(affiliate: string | void): string {
-    if (!affiliate) {
-      throw new Error('Affiliate is void');
-    }
-    const affiliate64 = {
-      branchId: priceDetails.lowestPrice.branchId,
-      affiliate,
-    };
-    const affiliate64String = btoa(JSON.stringify(affiliate64));
-    return affiliate64String;
-  }
 
   function createAffiliate(awinlink: string | void): void {
     if (!awinlink) {
@@ -120,11 +109,11 @@
   };
 </script>
 
-<main in:fly={{ x: -100, duration: 250, delay: 300 }} out:fly={{ x: -100, duration: 250 }}>
+<main in:fly|global={{ x: -100, duration: 250, delay: 300 }} out:fly|global={{ x: -100, duration: 250 }}>
   <div id="body" class="container-fluid">
     <div
       id="infoPanel"
-      in:fade={{
+      in:fade|global={{
         duration: 1000,
         delay: 300,
         easing: backOut,
@@ -140,7 +129,7 @@
     <div id="detailPanel">
       <div
         id="imagePanel"
-        in:fly={{
+        in:fly|global={{
           y: 100,
           duration: 1000,
           delay: 500,
@@ -151,7 +140,7 @@
       </div>
       <div
         id="chartPanel"
-        in:fly={{
+        in:fly|global={{
           y: 100,
           duration: 1000,
           delay: 500,
@@ -163,7 +152,7 @@
     </div>
     <div
       id="wrapper"
-      in:fly={{
+      in:fly|global={{
         y: 100,
         duration: 1000,
         delay: 500,
@@ -173,7 +162,7 @@
       <div id="pricePanel">
         <div>
           <article>
-            <button on:click={() => (showModal = true)}>Ab {priceDetails.lowestPrice.price}€ </button>
+            <Button on:click={() => (showModal = true)}>Ab {priceDetails.lowestPrice.price}€ </Button>
           </article>
         </div>
       </div>
@@ -186,8 +175,8 @@
     <p>Danke dass du uns unterstuetzt!❤️</p>
 
     {#if !affiliate}
-      <button style="display:none;" on:click={async () => createAffiliate(await fetchCashback())}
-        >Link generieren</button
+      <Button style="display:none;" on:click={async () => createAffiliate(await fetchCashback())}
+        >Link generieren</Button
       >
       <button on:click={async () => createAffiliate(await getLinkomatAwin())}>Link generieren</button>
     {:else}
@@ -195,41 +184,3 @@
     {/if}
   </Modal>
 </main>
-
-<style>
-  #detailPanel {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-  }
-
-  #chartPanel > * {
-    padding-top: 30px;
-    height: 15rem;
-    width: 30rem;
-  }
-  article > a {
-    display: flex;
-    justify-content: space-evenly;
-  }
-
-  a {
-    width: 100%;
-  }
-
-  hgroup {
-    padding-bottom: 20px;
-    display: grid;
-    place-items: center;
-    justify-content: center;
-  }
-  #imagePanel {
-    padding: 1rem 0;
-    display: grid;
-    place-items: center;
-    justify-content: center;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 0 50px 1px rgba(0, 0, 0, 0.15);
-  }
-</style>
