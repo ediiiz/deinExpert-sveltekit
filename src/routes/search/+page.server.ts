@@ -1,6 +1,6 @@
 import prisma from '$lib/prisma';
 import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import type { PageServerLoad } from '../$types';
 
 export const load: PageServerLoad = async ({ url }) => {
   let searchString = url.searchParams.get('p') ?? undefined;
