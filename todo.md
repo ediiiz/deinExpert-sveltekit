@@ -14,3 +14,7 @@
 ## Future
 
 - [x] 1. Implement a new feature (Recaptcha Verify)
+- [ ] 2. Implement a new feature (User Login)
+- [ ] 3. Implement a new feature (User Registration)
+- [ ] 4. Implement a new feature (User Profile)
+- [ ] 5. validata data (BranchAffilate) with zod

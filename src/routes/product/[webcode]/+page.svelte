@@ -4,6 +4,8 @@
   import type { PageData } from './$types';
   import Time from 'svelte-time';
   import { fetchCashback } from './affiliate';
+  import { getLinkomatAwin } from './linkomat';
+  import Modal from '$lib/components/Modal.svelte';
   //import { Chart } from 'chart.js/auto';
   import {
     Chart,
@@ -18,18 +20,18 @@
   import { onMount } from 'svelte';
   export let data: PageData;
 
-  Chart.register(
-    LineController,
-    PointElement,
-    CategoryScale,
-    LinearScale,
-    LineElement,
-    Filler,
-    Tooltip
-  );
+  //affiliate = createAffiliate64(await fetchCashback());
+
+  let showModal = false;
+
+  Chart.register(LineController, PointElement, CategoryScale, LinearScale, LineElement, Filler, Tooltip);
 
   let affiliate: string;
-  function createAffiliate64(affiliate: string): string {
+
+  function createAffiliate64(affiliate: string | void): string {
+    if (!affiliate) {
+      throw new Error('Affiliate is void');
+    }
     const affiliate64 = {
       branchId: priceDetails.lowestPrice.branchId,
       affiliate,
@@ -38,36 +40,46 @@
     return affiliate64String;
   }
 
-  const labelsDate = data.product?.priceHistory.map((item) => {
-    let date = new Date(item.date);
-    let day = date.getDate().toString().padStart(2, '0');
-    let month = (date.getMonth() + 1).toString().padStart(2, '0');
-    let formattedDate = `${day}.${month}`;
-    return formattedDate;
-  });
-
-  const labelsPrice = data.product?.priceHistory.map((item) => {
-    return item.price.sort((a, b) => a.price - b.price)[0].price;
-  });
-
-  let lineData = {
-    labels: labelsDate?.reverse(),
-    datasets: [
-      {
-        label: 'Preisverlauf',
-        backgroundColor: 'rgba(30, 136, 229,0.3)',
-        borderColor: 'rgba(30, 136, 229,1)',
-        borderWidth: 4,
-        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-        hoverBorderColor: 'rgba(255,99,132,1)',
-        data: labelsPrice?.reverse(),
-        fill: true,
-        tension: 0.4,
-      },
-    ],
-  };
+  function createAffiliate(awinlink: string | void): void {
+    if (!awinlink) {
+      throw new Error('Awinlink is void');
+    } else {
+      affiliate =
+        `${awinlink}&p=` +
+        encodeURIComponent(`${data.product.productUrl}?branch_id=${priceDetails.lowestPrice.branchId}`);
+    }
+  }
 
   onMount(async () => {
+    const labelsDate = data.product?.priceHistory.map((item) => {
+      let date = new Date(item.date);
+      let day = date.getDate().toString().padStart(2, '0');
+      let month = (date.getMonth() + 1).toString().padStart(2, '0');
+      let formattedDate = `${day}.${month}`;
+      return formattedDate;
+    });
+
+    const labelsPrice = data.product?.priceHistory.map((item) => {
+      return item.price.sort((a, b) => a.price - b.price)[0].price;
+    });
+
+    let lineData = {
+      labels: labelsDate?.reverse(),
+      datasets: [
+        {
+          label: 'Preisverlauf',
+          backgroundColor: 'rgba(30, 136, 229,0.3)',
+          borderColor: 'rgba(30, 136, 229,1)',
+          borderWidth: 4,
+          hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+          hoverBorderColor: 'rgba(255,99,132,1)',
+          data: labelsPrice?.reverse(),
+          fill: true,
+          tension: 0.4,
+        },
+      ],
+    };
+
     const ctx = document.getElementById('myChart')! as HTMLCanvasElement;
     const canvas = ctx.getContext('2d')!;
     if (!canvas) return null;
@@ -84,24 +96,14 @@
         },
       },
     });
-    affiliate = createAffiliate64(await fetchCashback());
   });
 
-  const sortedPrices = data.product.priceHistory[0].price.sort(
-    (a, b) => a.price - b.price
-  );
-  const [lowestPrice, highestPrice] = [
-    sortedPrices[0],
-    sortedPrices[sortedPrices.length - 1],
-  ];
+  const sortedPrices = data.product.priceHistory[0].price.sort((a, b) => a.price - b.price);
+  const [lowestPrice, highestPrice] = [sortedPrices[0], sortedPrices[sortedPrices.length - 1]];
 
-  const calculateSavings = (highest: number, lowest: number) =>
-    Math.round(((highest - lowest) / highest) * 100);
+  const calculateSavings = (highest: number, lowest: number) => Math.round(((highest - lowest) / highest) * 100);
 
-  const savingsInPercent = calculateSavings(
-    highestPrice.price,
-    lowestPrice.price
-  );
+  const savingsInPercent = calculateSavings(highestPrice.price, lowestPrice.price);
 
   const priceDetails = {
     lowestPrice: {
@@ -118,10 +120,7 @@
   };
 </script>
 
-<main
-  in:fly={{ x: -100, duration: 250, delay: 300 }}
-  out:fly={{ x: -100, duration: 250 }}
->
+<main in:fly={{ x: -100, duration: 250, delay: 300 }} out:fly={{ x: -100, duration: 250 }}>
   <div id="body" class="container-fluid">
     <div
       id="infoPanel"
@@ -134,10 +133,7 @@
       <hgroup>
         <h1>{data.product?.productName}</h1>
         <h2>
-          Updated: <Time
-            relative
-            timestamp={data.product?.priceHistory[0].date}
-          />
+          Updated: <Time relative timestamp={data.product?.priceHistory[0].date} />
         </h2>
       </hgroup>
     </div>
@@ -177,14 +173,27 @@
       <div id="pricePanel">
         <div>
           <article>
-            <a href={`?data=${affiliate}`} target="_blank" role="button">
-              Ab {priceDetails.lowestPrice.price}€</a
-            >
+            <button on:click={() => (showModal = true)}>Ab {priceDetails.lowestPrice.price}€ </button>
           </article>
         </div>
       </div>
     </div>
   </div>
+  <Modal bind:showModal>
+    <h2 slot="header">Noch eine Sache...</h2>
+    <div>Beachte dass du durch das Klicken auf einen Affiliate link weitergeleitet wirst.</div>
+    <div>Wir erhalten dadurch eine kleine Provision, dies hat keinen Einfluss auf deinen Preis!</div>
+    <p>Danke dass du uns unterstuetzt!❤️</p>
+
+    {#if !affiliate}
+      <button style="display:none;" on:click={async () => createAffiliate(await fetchCashback())}
+        >Link generieren</button
+      >
+      <button on:click={async () => createAffiliate(await getLinkomatAwin())}>Link generieren</button>
+    {:else}
+      <a href={affiliate} target="_blank" role="button">Weiter zum Deal</a>
+    {/if}
+  </Modal>
 </main>
 
 <style>
@@ -203,6 +212,11 @@
     display: flex;
     justify-content: space-evenly;
   }
+
+  a {
+    width: 100%;
+  }
+
   hgroup {
     padding-bottom: 20px;
     display: grid;
