@@ -1,6 +1,8 @@
-<script lang=ts>
-import * as Accordion from "$lib/components/ui/accordion";
-import { Button } from "$lib/components/ui/button";
+<script lang="ts">
+  import * as Accordion from '$lib/components/ui/accordion';
+  import { Button } from '$lib/components/ui/button';
+  import type { Session } from 'lucia';
+  export let session: Session | null;
 </script>
 
 <main>
@@ -15,15 +17,23 @@ import { Button } from "$lib/components/ui/button";
         <Accordion.Item value="item-1">
           <Accordion.Trigger>Menu</Accordion.Trigger>
           <Accordion.Content>
-            <div class="grid grid-cols-1 gap-2">
-            <Button href="/login" role="button">Login</Button>
-            <Button href="/help" role="button">FAQ</Button>
-            <Button href="/about" role="button">Über Uns</Button>
-          </div>
+            <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {#if session?.state === 'active'}
+                <Button
+                  ><form method="post" action="/user?/logout">
+                    <input type="submit" value="Sign out" />
+                  </form></Button
+                >
+                <Button href="/user" role="button">Account</Button>
+              {:else}
+                <Button href="/login" role="button">Sign In</Button>
+              {/if}
+              <Button href="/help" role="button">FAQ</Button>
+              <Button href="/about" role="button">Über Uns</Button>
+            </div>
           </Accordion.Content>
         </Accordion.Item>
       </Accordion.Root>
     </ul>
   </nav>
 </main>
-

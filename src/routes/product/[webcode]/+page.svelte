@@ -6,7 +6,7 @@
   import { fetchCashback } from './affiliate';
   import { getLinkomatAwin } from './linkomat';
   import Modal from '$lib/components/Modal.svelte';
-  import { Button } from "$lib/components/ui/button";
+  import { Button } from '$lib/components/ui/button';
   //import { Chart } from 'chart.js/auto';
   import {
     Chart,
@@ -19,6 +19,7 @@
     Tooltip,
   } from 'chart.js';
   import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
   export let data: PageData;
 
   //affiliate = createAffiliate64(await fetchCashback());
@@ -109,78 +110,82 @@
   };
 </script>
 
-<main in:fly|global={{ x: -100, duration: 250, delay: 300 }} out:fly|global={{ x: -100, duration: 250 }}>
+<main>
   <div id="body" class="container-fluid">
+    <div class="pb-20 pt-5">
+      <div
+        class="bg-gray-100 p-4 rounded-md shadow-2xl"
+        id="detailPanel"
+        in:fly|global={{
+          y: 100,
+          duration: 1000,
+          delay: 500,
+          easing: backOut,
+        }}
+      >
+        <div class="p-4">
+          <hgroup class="flex flex-col">
+            <h1 class="text-2xl text-center font-extrabold">{data.product?.productName}</h1>
+            <h2 class="text-center">
+              Updated: <Time relative timestamp={data.product?.priceHistory[0].date} />
+            </h2>
+          </hgroup>
+        </div>
+        <div class="flex flex-col justify-center items-center gap-2 sm:flex-row bg-white rounded-lg">
+          <div
+            class="text-center justify-center place-content-center object-cover flex items-center w-full p-4"
+            id="imagePanel"
+          >
+            <img src={data.product?.image} alt={data.product?.productName} />
+          </div>
+          <div class="flex justify-center items-center w-full p-4 bg-white rounded-lg" id="chartPanel">
+            <canvas id="myChart" />
+          </div>
+        </div>
+      </div>
+    </div>
     <div
-      id="infoPanel"
       in:fade|global={{
-        duration: 1000,
-        delay: 300,
-        easing: backOut,
-      }}
-    >
-      <hgroup>
-        <h1>{data.product?.productName}</h1>
-        <h2>
-          Updated: <Time relative timestamp={data.product?.priceHistory[0].date} />
-        </h2>
-      </hgroup>
-    </div>
-    <div id="detailPanel">
-      <div
-        id="imagePanel"
-        in:fly|global={{
-          y: 100,
-          duration: 1000,
-          delay: 500,
-          easing: backOut,
-        }}
-      >
-        <img src={data.product?.image} alt={data.product?.productName} />
-      </div>
-      <div
-        id="chartPanel"
-        in:fly|global={{
-          y: 100,
-          duration: 1000,
-          delay: 500,
-          easing: backOut,
-        }}
-      >
-        <canvas id="myChart" />
-      </div>
-    </div>
-    <div
-      id="wrapper"
-      in:fly|global={{
-        y: 100,
-        duration: 1000,
+        duration: 2000,
         delay: 500,
         easing: backOut,
       }}
     >
-      <div id="pricePanel">
+      <div class="pb-4 fixed mx-auto inset-x-0 bottom-0 sm:w-1/2" id="pricePanel">
         <div>
-          <article>
-            <Button on:click={() => (showModal = true)}>Ab {priceDetails.lowestPrice.price}€ </Button>
+          <article class="mx-4">
+            <Button class="w-full text-xl" on:click={() => (showModal = true)}
+              >Ab {priceDetails.lowestPrice.price}€</Button
+            >
           </article>
         </div>
       </div>
     </div>
   </div>
   <Modal bind:showModal>
-    <h2 slot="header">Noch eine Sache...</h2>
-    <div>Beachte dass du durch das Klicken auf einen Affiliate link weitergeleitet wirst.</div>
-    <div>Wir erhalten dadurch eine kleine Provision, dies hat keinen Einfluss auf deinen Preis!</div>
-    <p>Danke dass du uns unterstuetzt!❤️</p>
+    <h2 class=" p-4 text-2xl" slot="header">Noch eine Sache...</h2>
+    <div class="p-4 text-lg">
+      <p>Beachte dass du durch das Klicken auf einen Affiliate-Link weitergeleitet wirst.</p>
+      <br />
+      <p>Wir erhalten dadurch eine kleine Provision, dies hat keinen Einfluss auf deinen Preis!</p>
+    </div>
+    <div class="text-lg p-4">
+      <p>Danke dass du uns unterstuetzt!❤️</p>
+    </div>
 
     {#if !affiliate}
-      <Button style="display:none;" on:click={async () => createAffiliate(await fetchCashback())}
-        >Link generieren</Button
-      >
-      <button on:click={async () => createAffiliate(await getLinkomatAwin())}>Link generieren</button>
+      <div class="w-full">
+        <Button style="display:none;" on:click={async () => createAffiliate(await fetchCashback())}
+          >Link generieren</Button
+        >
+        <Button class="w-full text-xl" on:click={async () => createAffiliate(await getLinkomatAwin())}
+          >Link generieren</Button
+        >
+      </div>
     {:else}
-      <a href={affiliate} target="_blank" role="button">Weiter zum Deal</a>
+      <div class="w-full">
+        <Button class="w-full text-xl"><a href={affiliate} target="_blank" role="button">Weiter zum Deal</a></Button>
+      </div>
     {/if}
   </Modal>
 </main>

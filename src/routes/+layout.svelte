@@ -4,12 +4,15 @@
   import Search from '$lib/components/Search.svelte';
   import '$lib/styles/style.css';
   import Footer from '$lib/components/Footer.svelte';
-  import '../app.postcss'
+  import '../app.postcss';
+  import type { PageData } from './$types';
+  export let data: PageData;
+  let session = data.session;
 </script>
 
-<div class="container mx-auto">
+<div class="container mx-auto h-full">
   <div class="">
-    <Header />
+    <Header {session} />
   </div>
   <div class="py-4">
     <Search />

@@ -2,26 +2,37 @@
   export let showModal: boolean; // boolean
 
   let dialog: HTMLDialogElement; // HTMLDialogElement
-
+  import Button from './ui/button/button.svelte';
   $: if (dialog && showModal) dialog.showModal();
+
+  import Icon from '@iconify/svelte';
+  import closeBold from '@iconify/icons-iconamoon/close-bold';
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
-<dialog bind:this={dialog} on:close={() => (showModal = false)} on:click|self={() => dialog.close()}>
+<dialog
+  class="px-2 rounded-lg"
+  bind:this={dialog}
+  on:close={() => (showModal = false)}
+  on:click|self={() => dialog.close()}
+>
   <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <div on:click|stopPropagation>
-    <slot name="header" />
+  <div class="rounded-lg" on:click|stopPropagation>
+    <div class="flex flex-row place-content-evenly">
+      <slot name="header" />
+      <div class="flex place-content-end w-full">
+        <Button autofocus on:click={() => dialog.close()}><Icon class="text-lg" icon={closeBold} /></Button>
+      </div>
+    </div>
     <slot />
     <hr />
     <!-- svelte-ignore a11y-autofocus -->
-    <button autofocus on:click={() => dialog.close()}>Schliessen</button>
   </div>
 </dialog>
 
 <style>
   dialog {
     max-width: 32em;
-    border-radius: 0.2em;
     border: none;
     padding: 0;
   }

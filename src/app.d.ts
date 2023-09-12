@@ -17,9 +17,9 @@ declare global {
       caches: CacheStorage & { default: Cache };
     }
 
-    interface Session {}
+    interface Session { }
 
-    interface Stuff {}
+    interface Stuff { }
   }
 }
 
@@ -36,4 +36,4 @@ declare global {
 }
 
 // THIS IS IMPORTANT!!!
-export {};
+export { };
