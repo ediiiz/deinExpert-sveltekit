@@ -1,7 +1,7 @@
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = (async ({ locals }) => {
+export const load: LayoutServerLoad = (async ({ locals, url: { pathname } }) => {
   const session = locals.auth.validate()
-  return { session };
+  return { session, pathname };
 }) satisfies LayoutServerLoad;
 

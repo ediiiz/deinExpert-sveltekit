@@ -2,7 +2,15 @@
   import * as Accordion from '$lib/components/ui/accordion';
   import { Button } from '$lib/components/ui/button';
   import type { Session } from 'lucia';
+
   export let session: Session | null;
+
+  function logout() {
+    const form = document.getElementById('logout') as HTMLFormElement;
+    if (form) {
+      form.submit();
+    }
+  }
 </script>
 
 <main>
@@ -19,11 +27,10 @@
           <Accordion.Content>
             <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {#if session?.state === 'active'}
-                <Button
-                  ><form method="post" action="/user?/logout">
-                    <input type="submit" value="Sign out" />
-                  </form></Button
-                >
+                <form id="logout" style="display: none;" method="post" action="/user?/logout">
+                  <input type="submit" value="Sign out" />
+                </form>
+                <Button on:click={logout}>Sign Out</Button>
                 <Button href="/user" role="button">Account</Button>
               {:else}
                 <Button href="/login" role="button">Sign In</Button>

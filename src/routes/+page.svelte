@@ -5,11 +5,7 @@
   export let data: PageData;
 </script>
 
-<main
-  class="grid grid-rows-1"
-  in:fly|global={{ x: -100, duration: 250, delay: 300 }}
-  out:fly|global={{ x: -100, duration: 250 }}
->
+<main class="grid grid-rows-1">
   <div class="grid grid-rows-2 justify-center justify-items-center">
     <h1 class="text-3xl font-bold">Top 10</h1>
     <h2 class="text-xl">Die beliebtesten Produkte</h2>

@@ -7,7 +7,10 @@ export const load: PageServerLoad = async () => {
       priceHistory: {
         orderBy: { date: 'desc' },
         include: {
-          price: true,
+          price: {
+            orderBy: { price: 'asc' },
+            take: 1,
+          },
         },
         take: 1,
       },
@@ -15,8 +18,9 @@ export const load: PageServerLoad = async () => {
     take: 10,
     orderBy: { views: 'desc' },
   });
-
   return { products };
 };
+
+
 
 const actions: Actions = {};

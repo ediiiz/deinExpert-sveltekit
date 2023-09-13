@@ -64,9 +64,4 @@
       opacity: 1;
     }
   }
-  button {
-    border: none;
-    background-color: rgb(0, 0, 0);
-    display: block;
-  }
 </style>

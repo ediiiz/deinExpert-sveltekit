@@ -1,13 +1,10 @@
 <script lang="ts">
-  import { fade, fly } from 'svelte/transition';
-  import { backOut } from 'svelte/easing';
   import type { PageData } from './$types';
   import Time from 'svelte-time';
   import { fetchCashback } from './affiliate';
   import { getLinkomatAwin } from './linkomat';
   import Modal from '$lib/components/Modal.svelte';
   import { Button } from '$lib/components/ui/button';
-  //import { Chart } from 'chart.js/auto';
   import {
     Chart,
     LineController,
@@ -19,7 +16,7 @@
     Tooltip,
   } from 'chart.js';
   import { onMount } from 'svelte';
-  import { goto } from '$app/navigation';
+  import { fade } from 'svelte/transition';
   export let data: PageData;
 
   //affiliate = createAffiliate64(await fetchCashback());
@@ -113,16 +110,7 @@
 <main>
   <div id="body" class="container-fluid">
     <div class="pb-20 pt-5">
-      <div
-        class="bg-gray-100 p-4 rounded-md shadow-2xl"
-        id="detailPanel"
-        in:fly|global={{
-          y: 100,
-          duration: 1000,
-          delay: 500,
-          easing: backOut,
-        }}
-      >
+      <div class="bg-gray-100 p-4 rounded-md shadow-2xl" id="detailPanel">
         <div class="p-4">
           <hgroup class="flex flex-col">
             <h1 class="text-2xl text-center font-extrabold">{data.product?.productName}</h1>
@@ -144,13 +132,7 @@
         </div>
       </div>
     </div>
-    <div
-      in:fade|global={{
-        duration: 2000,
-        delay: 500,
-        easing: backOut,
-      }}
-    >
+    <div>
       <div class="pb-4 fixed mx-auto inset-x-0 bottom-0 sm:w-1/2" id="pricePanel">
         <div>
           <article class="mx-4">
@@ -162,30 +144,44 @@
       </div>
     </div>
   </div>
-  <Modal bind:showModal>
-    <h2 class=" p-4 text-2xl" slot="header">Noch eine Sache...</h2>
-    <div class="p-4 text-lg">
-      <p>Beachte dass du durch das Klicken auf einen Affiliate-Link weitergeleitet wirst.</p>
-      <br />
-      <p>Wir erhalten dadurch eine kleine Provision, dies hat keinen Einfluss auf deinen Preis!</p>
-    </div>
-    <div class="text-lg p-4">
-      <p>Danke dass du uns unterstuetzt!❤️</p>
-    </div>
+  <div transition:fade={{ duration: 500 }}>
+    <Modal bind:showModal>
+      <h2 class=" p-4 text-2xl" slot="header">Noch eine Sache...</h2>
+      <div class="p-4 text-lg">
+        <p>Beachte dass du durch das Klicken auf einen Affiliate-Link weitergeleitet wirst.</p>
+        <br />
+        <p>Wir erhalten dadurch eine kleine Provision, dies hat keinen Einfluss auf deinen Preis!</p>
+      </div>
+      <div class="text-lg p-4">
+        <p>Danke dass du uns unterstuetzt!❤️</p>
+      </div>
 
-    {#if !affiliate}
-      <div class="w-full">
-        <Button style="display:none;" on:click={async () => createAffiliate(await fetchCashback())}
-          >Link generieren</Button
-        >
-        <Button class="w-full text-xl" on:click={async () => createAffiliate(await getLinkomatAwin())}
-          >Link generieren</Button
-        >
+      <div class="tw-container">
+        {#if !affiliate}
+          <div transition:fade={{ duration: 200 }} class="w-full">
+            <Button style="display:none;" on:click={async () => createAffiliate(await fetchCashback())}
+              >Link generieren</Button
+            >
+            <Button class="w-full text-xl" on:click={async () => createAffiliate(await getLinkomatAwin())}
+              >Link generieren</Button
+            >
+          </div>
+        {:else}
+          <div transition:fade={{ duration: 200 }} class="w-full">
+            <Button class="w-full text-xl"><a href={affiliate} target="_blank" role="button">Weiter zum Deal</a></Button
+            >
+          </div>
+        {/if}
       </div>
-    {:else}
-      <div class="w-full">
-        <Button class="w-full text-xl"><a href={affiliate} target="_blank" role="button">Weiter zum Deal</a></Button>
-      </div>
-    {/if}
-  </Modal>
+    </Modal>
+  </div>
 </main>
+
+<style>
+  .tw-container {
+    display: grid;
+  }
+  .tw-container > * {
+    grid-area: 1 / 1;
+  }
+</style>
