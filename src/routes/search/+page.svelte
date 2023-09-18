@@ -1,4 +1,5 @@
 <script lang="ts">
+  import AppDownload from '$lib/components/AppDownload.svelte';
   import Product from '$lib/components/Product.svelte';
   import type { PageData } from './$types';
   import Time from 'svelte-time';
@@ -11,4 +12,5 @@
       <Product {products} />
     {/each}
   </div>
+  <AppDownload />
 </main>

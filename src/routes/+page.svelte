@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import Product from '$lib/components/Product.svelte';
+  import AppDownload from '$lib/components/AppDownload.svelte';
   export let data: PageData;
 </script>
 
@@ -15,13 +16,5 @@
       <Product {products} />
     {/each}
   </div>
-  <div>
-    <article>
-      <header>Vermisst du ein Produkt?</header>
-      <p>
-        Lade unser <a href="https://addons.mozilla.org/en-US/firefox/addon/preisdetektiv/">Firefox Addon</a> herunter um
-        deine Lieblingsprodukte hinzuzufuegen.
-      </p>
-    </article>
-  </div>
+  <AppDownload />
 </main>

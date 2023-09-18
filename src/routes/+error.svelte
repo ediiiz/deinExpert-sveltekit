@@ -1,5 +1,6 @@
 <script context="module" lang="ts">
   import { page } from '$app/stores';
+  import AppDownload from '$lib/components/AppDownload.svelte';
 </script>
 
 <main>
@@ -11,4 +12,5 @@
 
     <div />
   </div>
+  <AppDownload />
 </main>
