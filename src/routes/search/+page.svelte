@@ -3,14 +3,10 @@
   import type { PageData } from './$types';
   import Time from 'svelte-time';
   export let data: PageData;
-  import { fly } from 'svelte/transition';
 </script>
 
-<main
-  in:fly={{ x: -100, duration: 250, delay: 300 }}
-  out:fly={{ x: -100, duration: 250 }}
->
-  <div in:fly={{ x: -100, duration: 250, delay: 300 }}>
+<main class="grid grid-rows-1">
+  <div class="grid grid-rows-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
     {#each data.products as products}
       <Product {products} />
     {/each}

@@ -6,24 +6,14 @@
       price: Price[];
     })[];
   };
+  import { Button } from '$lib/components/ui/button';
 </script>
 
-<article>
-  <header>
-    {products.productName}
+<article class="bg-gray-100 rounded-md flex flex-col p-2 shadow-2xl pb-4">
+  <header class="flex items-center justify-center align-middle text-center">
+    <div class="flex py-4 h-20 items-center justify-center text-lg">{products.productName}</div>
   </header>
-  <a href="/product/{products.webcode}" role="button"
-    >Ab {products?.priceHistory[0]?.price.sort((a, b) => a.price - b.price)[0]
-      ?.price || '...'}€</a
+  <Button href="/product/{products.webcode}" class="text-lg text-center"
+    >Ab {products?.priceHistory[0]?.price.sort((a, b) => a.price - b.price)[0]?.price || '...'}€</Button
   >
-  <footer>
-    Updated: <Time relative timestamp={products.priceHistory[0].date} />
-  </footer>
 </article>
-
-<style>
-  article > a {
-    display: flex;
-    justify-content: space-evenly;
-  }
-</style>

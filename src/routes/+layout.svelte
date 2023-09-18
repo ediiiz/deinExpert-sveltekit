@@ -1,38 +1,22 @@
 <script lang="ts">
-  import { fly } from 'svelte/transition';
+  import type { LayoutServerData } from './$types';
   import Header from '$lib/components/Header.svelte';
   import Search from '$lib/components/Search.svelte';
-  import '@picocss/pico';
+  import PageTransition from '$lib/components/PageTransition.svelte';
   import '$lib/styles/style.css';
-  import Footer from '$lib/components/Footer.svelte';
+  import '../app.postcss';
+  export let data: LayoutServerData;
+  let session = data.session;
 </script>
 
-<div class="layout">
-  <div class="Header">
-    <Header />
+<div class="container mx-auto h-full">
+  <div class="">
+    <Header {session} />
   </div>
-  <div class="Search">
+  <div class="py-4">
     <Search />
   </div>
-  <div class="slot">
+  <PageTransition pathname={data.pathname}>
     <slot />
-  </div>
-  <div class="Footer">
-    <Footer />
-  </div>
+  </PageTransition>
 </div>
-
-<style>
-  .Header {
-    padding: 0 0rem;
-  }
-  .Search {
-    padding: 0 1rem;
-  }
-  .Footer {
-    padding: 0 1rem;
-  }
-  .slot {
-    padding: 0 0.5rem;
-  }
-</style>

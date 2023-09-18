@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { fade, fly } from 'svelte/transition';
-  import { backOut } from 'svelte/easing';
   import type { PageData } from './$types';
   import Time from 'svelte-time';
-  //import { Chart } from 'chart.js/auto';
+  import { fetchCashback } from './affiliate';
+  import { getLinkomatAwin } from './linkomat';
+  import Modal from '$lib/components/Modal.svelte';
+  import { Button } from '$lib/components/ui/button';
   import {
     Chart,
     LineController,
@@ -15,48 +16,57 @@
     Tooltip,
   } from 'chart.js';
   import { onMount } from 'svelte';
+  import { fade } from 'svelte/transition';
   export let data: PageData;
 
-  Chart.register(
-    LineController,
-    PointElement,
-    CategoryScale,
-    LinearScale,
-    LineElement,
-    Filler,
-    Tooltip
-  );
+  //affiliate = createAffiliate64(await fetchCashback());
 
-  const labelsDate = data.product?.priceHistory.map((item) => {
-    let date = new Date(item.date);
-    let day = date.getDate().toString().padStart(2, '0');
-    let month = (date.getMonth() + 1).toString().padStart(2, '0');
-    let formattedDate = `${day}.${month}`;
-    return formattedDate;
-  });
+  let showModal = false;
 
-  const labelsPrice = data.product?.priceHistory.map((item) => {
-    return item.price.sort((a, b) => a.price - b.price)[0].price;
-  });
+  Chart.register(LineController, PointElement, CategoryScale, LinearScale, LineElement, Filler, Tooltip);
 
-  let lineData = {
-    labels: labelsDate?.reverse(),
-    datasets: [
-      {
-        label: 'Preisverlauf',
-        backgroundColor: 'rgba(30, 136, 229,0.3)',
-        borderColor: 'rgba(30, 136, 229,1)',
-        borderWidth: 4,
-        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-        hoverBorderColor: 'rgba(255,99,132,1)',
-        data: labelsPrice?.reverse(),
-        fill: true,
-        tension: 0.4,
-      },
-    ],
-  };
+  let affiliate: string;
+
+  function createAffiliate(awinlink: string | void): void {
+    if (!awinlink) {
+      throw new Error('Awinlink is void');
+    } else {
+      affiliate =
+        `${awinlink}&p=` +
+        encodeURIComponent(`${data.product.productUrl}?branch_id=${priceDetails.lowestPrice.branchId}`);
+    }
+  }
 
   onMount(async () => {
+    const labelsDate = data.product?.priceHistory.map((item) => {
+      let date = new Date(item.date);
+      let day = date.getDate().toString().padStart(2, '0');
+      let month = (date.getMonth() + 1).toString().padStart(2, '0');
+      let formattedDate = `${day}.${month}`;
+      return formattedDate;
+    });
+
+    const labelsPrice = data.product?.priceHistory.map((item) => {
+      return item.price.sort((a, b) => a.price - b.price)[0].price;
+    });
+
+    let lineData = {
+      labels: labelsDate?.reverse(),
+      datasets: [
+        {
+          label: 'Preisverlauf',
+          backgroundColor: 'rgba(30, 136, 229,0.3)',
+          borderColor: 'rgba(30, 136, 229,1)',
+          borderWidth: 4,
+          hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+          hoverBorderColor: 'rgba(255,99,132,1)',
+          data: labelsPrice?.reverse(),
+          fill: true,
+          tension: 0.4,
+        },
+      ],
+    };
+
     const ctx = document.getElementById('myChart')! as HTMLCanvasElement;
     const canvas = ctx.getContext('2d')!;
     if (!canvas) return null;
@@ -75,21 +85,12 @@
     });
   });
 
-  const sortedPrices = data.product.priceHistory[0].price.sort(
-    (a, b) => a.price - b.price
-  );
-  const [lowestPrice, highestPrice] = [
-    sortedPrices[0],
-    sortedPrices[sortedPrices.length - 1],
-  ];
+  const sortedPrices = data.product.priceHistory[0].price.sort((a, b) => a.price - b.price);
+  const [lowestPrice, highestPrice] = [sortedPrices[0], sortedPrices[sortedPrices.length - 1]];
 
-  const calculateSavings = (highest: number, lowest: number) =>
-    Math.round(((highest - lowest) / highest) * 100);
+  const calculateSavings = (highest: number, lowest: number) => Math.round(((highest - lowest) / highest) * 100);
 
-  const savingsInPercent = calculateSavings(
-    highestPrice.price,
-    lowestPrice.price
-  );
+  const savingsInPercent = calculateSavings(highestPrice.price, lowestPrice.price);
 
   const priceDetails = {
     lowestPrice: {
@@ -106,107 +107,81 @@
   };
 </script>
 
-<main
-  in:fly={{ x: -100, duration: 250, delay: 300 }}
-  out:fly={{ x: -100, duration: 250 }}
->
+<main>
   <div id="body" class="container-fluid">
-    <div
-      id="infoPanel"
-      in:fade={{
-        duration: 1000,
-        delay: 300,
-        easing: backOut,
-      }}
-    >
-      <hgroup>
-        <h1>{data.product?.productName}</h1>
-        <h2>
-          Updated: <Time
-            relative
-            timestamp={data.product?.priceHistory[0].date}
-          />
-        </h2>
-      </hgroup>
-    </div>
-    <div id="detailPanel">
-      <div
-        id="imagePanel"
-        in:fly={{
-          y: 100,
-          duration: 1000,
-          delay: 500,
-          easing: backOut,
-        }}
-      >
-        <img src={data.product?.image} alt={data.product?.productName} />
-      </div>
-      <div
-        id="chartPanel"
-        in:fly={{
-          y: 100,
-          duration: 1000,
-          delay: 500,
-          easing: backOut,
-        }}
-      >
-        <canvas id="myChart" />
+    <div class="pb-20 pt-5">
+      <div class="bg-gray-100 p-4 rounded-md shadow-2xl" id="detailPanel">
+        <div class="p-4">
+          <hgroup class="flex flex-col">
+            <h1 class="text-2xl text-center font-extrabold">{data.product?.productName}</h1>
+            <h2 class="text-center">
+              Updated: <Time relative timestamp={data.product?.priceHistory[0].date} />
+            </h2>
+          </hgroup>
+        </div>
+        <div class="flex flex-col justify-center items-center gap-2 sm:flex-row bg-white rounded-lg">
+          <div
+            class="text-center justify-center place-content-center object-cover flex items-center w-full p-4"
+            id="imagePanel"
+          >
+            <img src={data.product?.image} alt={data.product?.productName} />
+          </div>
+          <div class="flex justify-center items-center w-full p-4 bg-white rounded-lg" id="chartPanel">
+            <canvas id="myChart" />
+          </div>
+        </div>
       </div>
     </div>
-    <div
-      id="wrapper"
-      in:fly={{
-        y: 100,
-        duration: 1000,
-        delay: 500,
-        easing: backOut,
-      }}
-    >
-      <div id="pricePanel">
+    <div>
+      <div class="pb-4 fixed mx-auto inset-x-0 bottom-0 sm:w-1/2" id="pricePanel">
         <div>
-          <article>
-            <a
-              href={`?branch=${priceDetails.lowestPrice.branchId}`}
-              role="button"
-            >
-              Ab {priceDetails.lowestPrice.price}€</a
+          <article class="mx-4">
+            <Button class="w-full text-xl" on:click={() => (showModal = true)}
+              >Ab {priceDetails.lowestPrice.price}€</Button
             >
           </article>
         </div>
       </div>
     </div>
   </div>
+  <div in:fade={{ duration: 500 }}>
+    <Modal bind:showModal>
+      <h2 class=" p-4 text-2xl" slot="header">Noch eine Sache...</h2>
+      <div class="p-4 text-lg">
+        <p>Beachte dass du durch das Klicken auf einen Affiliate-Link weitergeleitet wirst.</p>
+        <br />
+        <p>Wir erhalten dadurch eine kleine Provision, dies hat keinen Einfluss auf deinen Preis!</p>
+      </div>
+      <div class="text-lg p-4">
+        <p>Danke dass du uns unterstuetzt!❤️</p>
+      </div>
+
+      <div class="tw-container">
+        {#if !affiliate}
+          <div transition:fade={{ duration: 200 }} class="w-full">
+            <Button style="display:none;" on:click={async () => createAffiliate(await fetchCashback())}
+              >Link generieren</Button
+            >
+            <Button class="w-full text-xl" on:click={async () => createAffiliate(await getLinkomatAwin())}
+              >Link generieren</Button
+            >
+          </div>
+        {:else}
+          <div transition:fade={{ duration: 200 }} class="w-full">
+            <Button class="w-full text-xl"><a href={affiliate} target="_blank" role="button">Weiter zum Deal</a></Button
+            >
+          </div>
+        {/if}
+      </div>
+    </Modal>
+  </div>
 </main>
 
 <style>
-  #detailPanel {
+  .tw-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-    gap: 2rem;
   }
-
-  #chartPanel > * {
-    padding-top: 30px;
-    height: 15rem;
-    width: 30rem;
-  }
-  article > a {
-    display: flex;
-    justify-content: space-evenly;
-  }
-  hgroup {
-    padding-bottom: 20px;
-    display: grid;
-    place-items: center;
-    justify-content: center;
-  }
-  #imagePanel {
-    padding: 1rem 0;
-    display: grid;
-    place-items: center;
-    justify-content: center;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 0 50px 1px rgba(0, 0, 0, 0.15);
+  .tw-container > * {
+    grid-area: 1 / 1;
   }
 </style>
