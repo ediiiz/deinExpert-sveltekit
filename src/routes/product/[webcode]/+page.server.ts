@@ -29,7 +29,7 @@ export const load: PageServerLoad = async ({ params: { webcode }, url }) => {
       priceHistory: {
         orderBy: { date: 'desc' },
         include: {
-          price: true,
+          price: { orderBy: { price: 'asc' }, take: 100 },
         },
         take: 5,
       },

@@ -17,11 +17,18 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import { fade } from 'svelte/transition';
+  import Product from '$lib/components/Product.svelte';
   export let data: PageData;
 
   //affiliate = createAffiliate64(await fetchCashback());
 
   let showModal = false;
+  let selectedMarket = 0;
+
+  function setMarketShowModal(market: number) {
+    selectedMarket = market;
+    showModal = true;
+  }
 
   Chart.register(LineController, PointElement, CategoryScale, LinearScale, LineElement, Filler, Tooltip);
 
@@ -31,9 +38,7 @@
     if (!awinlink) {
       throw new Error('Awinlink is void');
     } else {
-      affiliate =
-        `${awinlink}&p=` +
-        encodeURIComponent(`${data.product.productUrl}?branch_id=${priceDetails.lowestPrice.branchId}`);
+      affiliate = `${awinlink}&p=` + encodeURIComponent(`${data.product.productUrl}?branch_id=${selectedMarket}`);
     }
   }
 
@@ -132,15 +137,18 @@
         </div>
       </div>
     </div>
-    <div>
-      <div class="pb-4 fixed mx-auto inset-x-0 bottom-0 sm:w-1/2" id="pricePanel">
-        <div>
-          <article class="mx-4">
-            <Button class="w-full text-xl" on:click={() => (showModal = true)}
-              >Ab {priceDetails.lowestPrice.price}€</Button
+    <div class="pb-24">
+      <div class="bg-gray-100 rounded-md flex flex-col p-4 shadow-2xl gap-4 pb-4 justify-center items-center">
+        {#each data.product?.priceHistory[0].price as price}
+          <div class="flex flex-col bg-white rounded-md pb-4 px-4 w-full items-center justify-center">
+            <div class="flex items-center justify-center align-middle text-center p-4 text-lg">
+              {price.branchName}
+            </div>
+            <Button on:click={() => setMarketShowModal(price.branchId)} class="w-full text-xl p-8"
+              ><div class="p-4">{price.price}€</div></Button
             >
-          </article>
-        </div>
+          </div>
+        {/each}
       </div>
     </div>
   </div>
