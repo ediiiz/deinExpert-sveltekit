@@ -15,7 +15,6 @@ const productSchema = z.object({
       branchId: z.number(),
     })
   ),
-  verify: z.string(),
 });
 
 export const POST: RequestHandler = async ({ request }) => {
@@ -28,11 +27,18 @@ export const POST: RequestHandler = async ({ request }) => {
     });
   }
 
-  const recaptchaValidation = await validateRecaptcha(product.verify);
+  /*const recaptchaValidation = await validateRecaptcha(product.verify);
   if (!recaptchaValidation.success) {
     throw error(500, {
       message:
         'Recaptcha ungültig - versuchst du zu falsche Daten hochzuladen?😔',
+    });
+  }*/
+
+  if (product.price.length === 0) {
+    throw error(500, {
+      message:
+        'Preis ungültig - versuchst du zu falsche Daten hochzuladen?😔',
     });
   }
 
@@ -61,12 +67,16 @@ export const POST: RequestHandler = async ({ request }) => {
           'Webcode ungültig - versuchst du zu falsche Daten hochzuladen?😔',
       });
     }
+    webcodeValidation.items = webcodeValidation.items.filter(
+      (item) => item.pagemap.cse_thumbnail
+    );
+
     const productCreate = await prisma.product.create({
       data: {
         webcode: product.webcode,
-        productName: webcodeValidation.items[0].pagemap.listitem[4].name,
+        productName: webcodeValidation.items[0].title.split(" -")[0],
         image: webcodeValidation.items[0].pagemap.cse_thumbnail[0].src,
-        productUrl: webcodeValidation.items[0].link,
+        productUrl: webcodeValidation.items[0].link.split("?")[0],
         priceHistory: {
           create: {
             price: {
