@@ -8,10 +8,9 @@ export const GET: RequestHandler = async ({ params: { webcode } }) => {
     where: { webcode: webcode },
     include: {
       priceHistory: {
-        include: {
-          price: true,
-        },
         take: 1,
+        // Take the newsest price history
+        orderBy: { date: 'desc' },
       },
     },
   });
