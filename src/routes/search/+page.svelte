@@ -3,7 +3,6 @@
   import type { PageData } from './$types';
   import Time from 'svelte-time';
   export let data: PageData;
-  import { fly } from 'svelte/transition';
 </script>
 
 <main class="grid grid-rows-1">

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { fly } from 'svelte/transition';
 </script>
 
 <main class="container-fluid">

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { fly } from 'svelte/transition';
   import type { PageData } from './$types';
   import Product from '$lib/components/Product.svelte';
   export let data: PageData;

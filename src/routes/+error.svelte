@@ -1,6 +1,5 @@
 <script context="module" lang="ts">
   import { page } from '$app/stores';
-  import { fly } from 'svelte/transition';
 </script>
 
 <main>

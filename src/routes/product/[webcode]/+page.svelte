@@ -144,7 +144,7 @@
       </div>
     </div>
   </div>
-  <div transition:fade={{ duration: 500 }}>
+  <div in:fade={{ duration: 500 }}>
     <Modal bind:showModal>
       <h2 class=" p-4 text-2xl" slot="header">Noch eine Sache...</h2>
       <div class="p-4 text-lg">
