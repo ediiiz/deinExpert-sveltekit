@@ -20,7 +20,7 @@
   import Product from '$lib/components/Product.svelte';
   export let data: PageData;
 
-  //affiliate = createAffiliate64(await fetchCashback());
+  Chart.register(LineController, PointElement, CategoryScale, LinearScale, LineElement, Filler, Tooltip);
 
   let showModal = false;
   let selectedMarket = 0;
@@ -29,16 +29,18 @@
     selectedMarket = market;
     showModal = true;
   }
+  let affiliate: string | undefined = undefined;
+  let awinlinkStore: string;
 
-  Chart.register(LineController, PointElement, CategoryScale, LinearScale, LineElement, Filler, Tooltip);
+  $: affiliate = createAffiliate(awinlinkStore, selectedMarket);
 
-  let affiliate: string;
-
-  function createAffiliate(awinlink: string | void): void {
-    if (!awinlink) {
-      throw new Error('Awinlink is void');
-    } else {
-      affiliate = `${awinlink}&p=` + encodeURIComponent(`${data.product.productUrl}?branch_id=${selectedMarket}`);
+  function createAffiliate(awinlink: string | void, selectedMarket?: number): string | undefined {
+    try {
+      if (!awinlink) return undefined;
+      awinlinkStore = awinlink;
+      return `${awinlinkStore}&p=` + encodeURIComponent(`${data.product.productUrl}?branch_id=${selectedMarket}`);
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -140,14 +142,29 @@
     <div class="pb-24">
       <div class="bg-gray-100 rounded-md flex flex-col p-4 shadow-2xl gap-4 pb-4 justify-center items-center">
         {#each data.product?.priceHistory[0].price as price}
-          <div class="flex flex-col bg-white rounded-md pb-4 px-4 w-full items-center justify-center">
-            <div class="flex items-center justify-center align-middle text-center p-4 text-lg">
-              {price.branchName}
+          {#if price.aussteller}
+            <div class="flex flex-col bg-orange-400 rounded-md pb-4 px-4 w-full items-center justify-center">
+              <div class="flex items-center justify-center align-middle text-center p-4 text-lg">
+                {price.branchName}
+              </div>
+              <Button on:click={() => setMarketShowModal(price.branchId)} class="w-full text-xl p-8">
+                <div class="p-4">
+                  {price.price}€ (Aussteller)
+                </div>
+              </Button>
             </div>
-            <Button on:click={() => setMarketShowModal(price.branchId)} class="w-full text-xl p-8"
-              ><div class="p-4">{price.price}€</div></Button
-            >
-          </div>
+          {:else}
+            <div class="flex flex-col bg-white rounded-md pb-4 px-4 w-full items-center justify-center">
+              <div class="flex items-center justify-center align-middle text-center p-4 text-lg">
+                {price.branchName}
+              </div>
+              <Button on:click={() => setMarketShowModal(price.branchId)} class="w-full text-xl p-8">
+                <div class="p-4">
+                  {price.price}€
+                </div>
+              </Button>
+            </div>
+          {/if}
         {/each}
       </div>
     </div>
@@ -165,7 +182,7 @@
       </div>
 
       <div class="tw-container">
-        {#if !affiliate}
+        {#if !awinlinkStore}
           <div transition:fade={{ duration: 200 }} class="w-full">
             <Button style="display:none;" on:click={async () => createAffiliate(await fetchCashback())}
               >Link generieren</Button

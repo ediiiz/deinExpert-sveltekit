@@ -35,6 +35,7 @@ model Price {
   price          Float
   branchName     String
   branchId       Int
+  aussteller     Boolean      @default(false)
   priceHistory   PriceHistory @relation(fields: [priceHistoryId], references: [priceHistoryId])
   priceHistoryId String
 

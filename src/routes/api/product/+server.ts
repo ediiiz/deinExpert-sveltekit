@@ -13,6 +13,7 @@ const productSchema = z.object({
       price: z.number(),
       branchName: z.string(),
       branchId: z.number(),
+      aussteller: z.boolean(),
     })
   ),
 });
