@@ -131,7 +131,11 @@
             class="text-center justify-center place-content-center object-cover flex items-center w-full p-4"
             id="imagePanel"
           >
-            <img src={data.product?.image} alt={data.product?.productName} />
+            {#if !data.product?.image}
+              <div>Kein Bild vorhanden</div>
+            {:else}
+              <img src={data.product?.image} alt={data.product?.productName} />
+            {/if}
           </div>
           <div class="flex justify-center items-center w-full p-4 bg-white rounded-lg" id="chartPanel">
             <canvas id="myChart" />

@@ -76,7 +76,7 @@ export const POST: RequestHandler = async ({ request }) => {
       data: {
         webcode: product.webcode,
         productName: webcodeValidation.items[0].title.split(" -")[0],
-        image: webcodeValidation.items[0].pagemap.cse_thumbnail[0].src,
+        image: webcodeValidation.items[0].pagemap.cse_thumbnail[0].src ? webcodeValidation.items[0].pagemap.cse_thumbnail[0].src : "",
         productUrl: webcodeValidation.items[0].link.split("?")[0],
         priceHistory: {
           create: {
