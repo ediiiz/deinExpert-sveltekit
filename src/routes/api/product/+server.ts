@@ -68,16 +68,24 @@ export const POST: RequestHandler = async ({ request }) => {
           'Webcode ungültig - versuchst du zu falsche Daten hochzuladen?😔',
       });
     }
-    webcodeValidation.items = webcodeValidation.items.filter(
-      (item) => item.pagemap.cse_thumbnail
-    );
+
+    // make this more error safe ""
+    if (!webcodeValidation?.items?.length) {
+      throw new Error("webcodeValidation.items is undefined or empty.");
+    }
+
+    const firstItem = webcodeValidation.items[0];
+    const productName = firstItem.title?.split(" -")[0] ?? firstItem.title;
+    const image = firstItem.pagemap?.cse_thumbnail?.[0]?.src ?? "";
+    const productUrl = firstItem.link?.split("?")[0] ?? firstItem.link;
+
 
     const productCreate = await prisma.product.create({
       data: {
         webcode: product.webcode,
-        productName: webcodeValidation.items[0].title.split(" -")[0],
-        image: webcodeValidation.items[0].pagemap.cse_thumbnail[0].src ? webcodeValidation.items[0].pagemap.cse_thumbnail[0].src : "",
-        productUrl: webcodeValidation.items[0].link.split("?")[0],
+        productName: productName,
+        image: image,
+        productUrl: productUrl,
         priceHistory: {
           create: {
             price: {
