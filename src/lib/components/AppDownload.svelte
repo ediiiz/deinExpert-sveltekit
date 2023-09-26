@@ -4,7 +4,7 @@
     <p class="text-lg text-center">
       Lade unsere <a
         class="bg-black text-white p-2 rounded-md"
-        href="https://snack.expo.dev/@ediiiz/deinexpert-expo"
+        href="https://groups.google.com/g/deinexpertinternaltest/"
         target="_blank">App</a
       > herunter um deine Lieblingsprodukte hinzuzufuegen.
     </p>
