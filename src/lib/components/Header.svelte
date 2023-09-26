@@ -35,8 +35,7 @@
               {:else}
                 <Button href="/login" role="button">Sign In</Button>
               {/if}
-              <Button href="/help" role="button">FAQ</Button>
-              <Button href="/about" role="button">Über Uns</Button>
+              <Button href="/datenschutz" role="button">Datenschutz</Button>
             </div>
           </Accordion.Content>
         </Accordion.Item>
