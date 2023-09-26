@@ -1,4 +1,4 @@
-<body class="bg-gray-100 p-8">
+<body class=" p-8">
   <div class="container mx-auto bg-white rounded-lg p-8 shadow-lg">
     <h1 class="text-2xl font-bold mb-4">Datenschutzrichtlinie für deinExpert Agent</h1>
 
