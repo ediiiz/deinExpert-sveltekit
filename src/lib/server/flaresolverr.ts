@@ -3,7 +3,7 @@ import type { ProductData } from "$lib/types/ProductData";
 import type { FlareSolverrResponseData } from "$lib/types/FlareSolverrResponseData";
 import fetch from "node-fetch";
 import { HttpsProxyAgent } from 'https-proxy-agent';
-import curl from 'node-curl-impersonate'
+import { CurlImpersonate } from 'node-curl-impersonate'
 import type { CurlImpersonateOptions } from "node-curl-impersonate/dist/interfaces";
 
 const proxyArr = PUBLIC_WTFPROXY_URL.split(":")
@@ -56,7 +56,7 @@ export class FlareSolverrAgent {
       }
     }
 
-    const curlclient = new curl(productUrl, requestOptions);
+    const curlclient = new CurlImpersonate(productUrl, requestOptions);
     const response = await curlclient.makeRequest();
     //const response = await fetch(productUrl, requestOptions)
 
