@@ -24,5 +24,5 @@ export const GET: RequestHandler = async () => {
 
   const expertData = await agent.getArticleId("https://www.expert.de")
 
-  return json({ success: true, expertData });
+  return json({ expertData });
 };
